@@ -14,3 +14,6 @@ The theme used for the visusalisations is a custom theme. The included `.ttf` fi
 3. Alternatively, the font can be installed and run with `fontextra` package.
 
 
+### Bayesian Network
+The Bayesian Network has been included within the supplementary files for use. Netica/GeNie is required to open the file. 
+1. Included within the data is the validation data used to produce the ROC curve.
