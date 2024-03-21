@@ -1,0 +1,259 @@
+// ~->[DNET-1]->~
+
+// File created by an unlicensed user using Netica 7.01 on Mar 21, 2024 at 04:02:58 UTC.
+
+bnet AST_Bayesian_Network_for_Genie {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1709529964;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLENAME;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 12;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	ShowLinkStrengths = 1;
+	windowposn = (126, 9, 1379, 735);
+	resolution = 72;
+	drawingbounds = (1462, 799);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00e1e1e1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00f8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Medication_Adherence {
+	discrete = TRUE;
+	states = (Proper_Adherence, Improper_Adherence);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Proper Adherence Improper Adheren 
+		  (0.7,         0.3);
+	whenchanged = 1708302668;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (186, 234);
+		height = 9;
+		};
+	};
+
+node Persisting_Symptoms {
+	discrete = TRUE;
+	states = (Symptoms_Persist, Symptoms_Resolve);
+	kind = NATURE;
+	chance = CHANCE;
+	inputs = (Medication_Adherence);
+	parents = (Medication_Adherence);
+	probs = 
+		// Symptoms Persist Symptoms Resolve  // Medication_Adherence 
+		  (0.16,        0.84,         // Proper Adherence     
+		   0.84,        0.16);        // Improper Adheren     ;
+	whenchanged = 1708316701;
+	belief = (0.364, 0.636);
+	visual V1 {
+		center = (186, 324);
+		height = 3;
+		};
+	};
+
+node Clinician_Experience {
+	discrete = TRUE;
+	states = (Experienced, Unexperienced);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Experienced  Unexperienced 
+		  (0.7,         0.3);
+	whenchanged = 1709525006;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (492, 240);
+		dispform = BELIEFBARS;
+		height = 7;
+		};
+	};
+
+node Sexual_Orientation {
+	discrete = TRUE;
+	states = (Heterosexual, Homosexual);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Heterosexual Homosexual   
+		  (0.292,       0.708);
+	whenchanged = 1707702450;
+	belief = (0.292, 0.708);
+	visual V1 {
+		center = (1056, 324);
+		height = 5;
+		};
+	};
+
+node Past_Diagnoses {
+	discrete = TRUE;
+	states = (One, Two_to_Four, Five_to_nine, More_than_ten);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// One          Two to Four  Five to nine More than ten 
+		  (0.7297075,   0.2463787,   0.02357691,  3.36813e-4);
+	whenchanged = 1707876423;
+	belief = (0.7297075, 0.2463787, 0.02357691, 3.368131e-4);
+	visual V1 {
+		center = (1056, 228);
+		height = 6;
+		};
+	};
+
+node Number_Partners {
+	discrete = TRUE;
+	states = (One, Two_to_five, More_than_six);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// One          Two to five  More than six 
+		  (0.3657198,   0.4948354,   0.1394448);
+	whenchanged = 1707702450;
+	belief = (0.3657198, 0.4948354, 0.1394448);
+	visual V1 {
+		center = (1056, 402);
+		height = 4;
+		};
+	};
+
+node Epidemiological_Factors {
+	discrete = TRUE;
+	states = (High_Risk_Group, Low_Risk_Group);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Sexual_Orientation, Past_Diagnoses, Number_Partners);
+	probs = 
+		// High Risk Group Low Risk Group  // Sexual_Orientation Past_Diagnoses Number_Partners 
+		  (0.05,        0.95,         // Heterosexual       One            One             
+		   0.2,         0.8,          // Heterosexual       One            Two to five     
+		   0.35,        0.65,         // Heterosexual       One            More than six   
+		   0.3,         0.7,          // Heterosexual       Two to Four    One             
+		   0.45,        0.55,         // Heterosexual       Two to Four    Two to five     
+		   0.6,         0.4,          // Heterosexual       Two to Four    More than six   
+		   0.65,        0.35,         // Heterosexual       Five to nine   One             
+		   0.8,         0.2,          // Heterosexual       Five to nine   Two to five     
+		   0.95,        0.05,         // Heterosexual       Five to nine   More than six   
+		   0.75,        0.25,         // Heterosexual       More than ten  One             
+		   0.9,         0.1,          // Heterosexual       More than ten  Two to five     
+		   0.95,        0.05,         // Heterosexual       More than ten  More than six   
+		   0.1,         0.9,          // Homosexual         One            One             
+		   0.25,        0.75,         // Homosexual         One            Two to five     
+		   0.4,         0.6,          // Homosexual         One            More than six   
+		   0.4,         0.6,          // Homosexual         Two to Four    One             
+		   0.55,        0.45,         // Homosexual         Two to Four    Two to five     
+		   0.7,         0.3,          // Homosexual         Two to Four    More than six   
+		   0.7,         0.3,          // Homosexual         Five to nine   One             
+		   0.85,        0.15,         // Homosexual         Five to nine   Two to five     
+		   0.95,        0.05,         // Homosexual         Five to nine   More than six   
+		   0.8,         0.2,          // Homosexual         More than ten  One             
+		   0.9,         0.1,          // Homosexual         More than ten  Two to five     
+		   0.95,        0.05);        // Homosexual         More than ten  More than six   ;
+	whenchanged = 1709519057;
+	belief = (0.2860286, 0.7139714);
+	visual V1 {
+		center = (786, 324);
+		height = 8;
+		link 2 {
+			path = ((935, 270), (871, 293));
+			};
+		link 3 {
+			path = ((936, 369), (889, 356));
+			};
+		};
+	};
+
+node Initial_Treatment_Failure {
+	discrete = TRUE;
+	states = (Treatment_Success, Treatment_Failure);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Persisting_Symptoms, Clinician_Experience, Epidemiological_Factors);
+	probs = 
+		// Treatment Succes Treatment Failur  // Persisting_Symptoms Clinician_Experience Epidemiological_Factors 
+		  (0.15,        0.85,         // Symptoms Persist    Experienced          High Risk Group         
+		   0.3,         0.7,          // Symptoms Persist    Experienced          Low Risk Group          
+		   0.05,        0.95,         // Symptoms Persist    Unexperienced        High Risk Group         
+		   0.15,        0.85,         // Symptoms Persist    Unexperienced        Low Risk Group          
+		   0.9,         0.1,          // Symptoms Resolve    Experienced          High Risk Group         
+		   0.95,        0.05,         // Symptoms Resolve    Experienced          Low Risk Group          
+		   0.9,         0.1,          // Symptoms Resolve    Unexperienced        High Risk Group         
+		   0.95,        0.05);        // Symptoms Resolve    Unexperienced        Low Risk Group          ;
+	whenchanged = 1709525812;
+	belief = (0.6738688, 0.3261312);
+	visual V1 {
+		center = (492, 324);
+		dispform = BELIEFBARS;
+		height = 1;
+		};
+	};
+
+node Unprompted_Test {
+	discrete = TRUE;
+	states = (Initiated, Not_initiated);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = ();
+	probs = 
+		// Initiated    Not initiated 
+		  (0.01,        0.99);
+	whenchanged = 1708303868;
+	belief = (0.01, 0.99);
+	visual V1 {
+		center = (492, 510);
+		dispform = BELIEFBARS;
+		height = 10;
+		};
+	};
+
+node AST_Test {
+	discrete = TRUE;
+	states = (Initiated, Not_initiated);
+	kind = NATURE;
+	chance = CHANCE;
+	parents = (Initial_Treatment_Failure, Unprompted_Test);
+	probs = 
+		// Initiated    Not initiated  // Initial_Treatment_Failure Unprompted_Test 
+		  (0.99,        0.01,         // Treatment Succes          Initiated       
+		   0.01,        0.99,         // Treatment Succes          Not initiated   
+		   0.99,        0.01,         // Treatment Failur          Initiated       
+		   0.9,         0.1);         // Treatment Failur          Not initiated   ;
+	numcases = 
+		                 // Initial_Treatment_Failure Unprompted_Test 
+		  (1,            // Treatment Succes          Initiated       
+		   0,            // Treatment Succes          Not initiated   
+		   1,            // Treatment Failur          Initiated       
+		   0);           // Treatment Failur          Not initiated   ;
+	whenchanged = 1709529964;
+	belief = (0.3071542, 0.6928458);
+	visual V1 {
+		center = (492, 420);
+		dispform = BELIEFBARS;
+		height = 2;
+		};
+	};
+ElimOrder = (Medication_Adherence, Unprompted_Test, AST_Test, Persisting_Symptoms, Clinician_Experience, Initial_Treatment_Failure, Sexual_Orientation, Past_Diagnoses, Number_Partners, Epidemiological_Factors);
+};
